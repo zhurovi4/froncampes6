@@ -10,37 +10,37 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var NewsModel =
+var url = 'https://newsapi.org/v2/';
+var apiKey = '6e78c1ac891743f4a6d6fed43ec4225e';
+var newsContainer = document.querySelector('.news-grid');
+
+var Articles =
 /*#__PURE__*/
 function () {
-  function NewsModel(apiKey) {
-    _classCallCheck(this, NewsModel);
+  function Articles(url, apiKey, sources) {
+    _classCallCheck(this, Articles);
 
-    this.url = 'https://newsapi.org/v2/';
+    this.url = url;
     this.apiKey = apiKey;
+    this.sources = sources;
     this.requestParams = {
-      sources: 'abc-news',
-      pageSize: '5',
+      pageSize: '10',
       apiKey: this.apiKey
     };
   }
 
-  _createClass(NewsModel, [{
-    key: "getNews",
+  _createClass(Articles, [{
+    key: "fetchNews",
     value: function () {
-      var _getNews = _asyncToGenerator(
+      var _fetchNews = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee() {
-        var _this = this;
-
         var params, response, responseJson;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                params = Object.keys(this.requestParams).map(function (key) {
-                  return "".concat(key, "=").concat(_this.requestParams[key]);
-                }).join('&');
+                params = "sources=".concat(this.sources, "&pageSize=").concat(this.requestParams.pageSize, "&apiKey=").concat(this.apiKey);
                 _context.next = 3;
                 return fetch("".concat(this.url, "everything?").concat(params));
 
@@ -51,7 +51,7 @@ function () {
 
               case 6:
                 responseJson = _context.sent;
-                return _context.abrupt("return", responseJson.articles);
+                this.getMarkup(responseJson.articles);
 
               case 8:
               case "end":
@@ -61,17 +61,45 @@ function () {
         }, _callee, this);
       }));
 
-      return function getNews() {
-        return _getNews.apply(this, arguments);
+      return function fetchNews() {
+        return _fetchNews.apply(this, arguments);
       };
     }()
   }, {
-    key: "getSources",
+    key: "getMarkup",
+    value: function getMarkup(news) {
+      var tpl = news.map(function (item) {
+        return "\n            <div class=\"article\">\n              <div class=\"article-item\">\n                <div class=\"article-image\" style=\"background-image: url('".concat(item.urlToImage, "')\"></div>\n                <a href=\"").concat(item.url, "\" target=\"_blank\" class=\"article-heading\">").concat(item.title, "</a>\n                <div class=\"article-content\">\n                  <p>").concat(item.description, "</p>\n                </div>\n              </div>\n            </div>\n          ");
+      }).join('');
+      this.render(tpl);
+    }
+  }, {
+    key: "render",
+    value: function render(template) {
+      newsContainer.innerHTML = template;
+    }
+  }]);
+
+  return Articles;
+}();
+
+var Channels =
+/*#__PURE__*/
+function () {
+  function Channels(url, apiKey) {
+    _classCallCheck(this, Channels);
+
+    this.url = url;
+    this.apiKey = apiKey;
+  }
+
+  _createClass(Channels, [{
+    key: "fetchListData",
     value: function () {
-      var _getSources = _asyncToGenerator(
+      var _fetchListData = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2() {
-        var response, responseJson;
+        var res, resjson;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
@@ -80,13 +108,13 @@ function () {
                 return fetch("".concat(this.url, "sources?apiKey=").concat(this.apiKey));
 
               case 2:
-                response = _context2.sent;
+                res = _context2.sent;
                 _context2.next = 5;
-                return response.json();
+                return res.json();
 
               case 5:
-                responseJson = _context2.sent;
-                return _context2.abrupt("return", responseJson.sources);
+                resjson = _context2.sent;
+                this.renderSourceControl('source-selector', resjson.sources);
 
               case 7:
               case "end":
@@ -96,19 +124,82 @@ function () {
         }, _callee2, this);
       }));
 
-      return function getSources() {
-        return _getSources.apply(this, arguments);
+      return function fetchListData() {
+        return _fetchListData.apply(this, arguments);
       };
     }()
   }, {
-    key: "updateRequestParams",
-    value: function updateRequestParams(key, value) {
-      this.requestParams[key] = value;
+    key: "renderSourceControl",
+    value: function renderSourceControl(container, options) {
+      var dropdown = document.getElementById(container);
+      var optionsSet = '';
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var value = _step.value;
+          optionsSet += "<option value=\"".concat(value.id, "\">").concat(value.name, "</option>");
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      dropdown.innerHTML = optionsSet;
+      this.addSourceHandler();
+    }
+  }, {
+    key: "addSourceHandler",
+    value: function addSourceHandler() {
+      var element = document.getElementById('source-selector');
+      element.addEventListener('change', function (e) {
+        var updatedArticles = new Articles(url, apiKey, e.target.value);
+        updatedArticles.fetchNews();
+      });
     }
   }]);
 
-  return NewsModel;
+  return Channels;
 }();
+
+var App =
+/*#__PURE__*/
+function () {
+  function App(url, apiKey, source) {
+    _classCallCheck(this, App);
+
+    this.url = url;
+    this.apiKey = apiKey;
+    this.source = source;
+  }
+
+  _createClass(App, [{
+    key: "init",
+    value: function init() {
+      var proba2 = new Channels(this.url, this.apiKey);
+      proba2.fetchListData();
+      var proba = new Articles(this.url, this.apiKey, this.source);
+      proba.fetchNews();
+    }
+  }]);
+
+  return App;
+}();
+
+var myApp = new App(url, apiKey, 'abc-news');
+myApp.init();
 
 var ArticlesList =
 /*#__PURE__*/
@@ -208,26 +299,26 @@ function () {
     value: function renderSourceControl(container, options) {
       var dropdown = document.getElementById(container);
       var optionsSet = '';
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
       try {
-        for (var _iterator = options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var value = _step.value;
+        for (var _iterator2 = options[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var value = _step2.value;
           optionsSet += "<option value=\"".concat(value.id, "\">").concat(value.name, "</option>");
         }
       } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion && _iterator.return != null) {
-            _iterator.return();
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
           }
         } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+          if (_didIteratorError2) {
+            throw _iteratorError2;
           }
         }
       }
@@ -237,30 +328,51 @@ function () {
   }, {
     key: "addSourceHandler",
     value: function addSourceHandler() {
-      var _this2 = this;
+      var _this = this;
 
       var element = document.getElementById('source-selector');
       element.addEventListener('change', function (e) {
-        _this2.newsModel.updateRequestParams('sources', e.target.value);
+        _this.newsModel.updateRequestParams('sources', e.target.value);
 
-        _this2.updateNews();
+        _this.updateNews();
       });
     }
   }, {
     key: "updateNews",
-    value: function updateNews() {
-      this.newsModel.getNews().then(function (news) {
-        var articlesList = new ArticlesList(newsModel);
-        articlesList.showNews();
-      });
-    }
+    value: function () {
+      var _updateNews = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee5() {
+        var articlesList;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return this.newsModel.getNews();
+
+              case 2:
+                articlesList = new ArticlesList(newsModel);
+                articlesList.showNews();
+
+              case 4:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
+      }));
+
+      return function updateNews() {
+        return _updateNews.apply(this, arguments);
+      };
+    }()
   }]);
 
   return ChannelsList;
 }();
-
-var newsModel = new NewsModel('6e78c1ac891743f4a6d6fed43ec4225e');
-var renderChannelsList = new ChannelsList(newsModel);
-var articlesList = new ArticlesList(newsModel);
+/* const newsModel = new NewsModel(url, apiKey, 'abc-news');
+const renderChannelsList = new ChannelsList(newsModel);
+const articlesList = new ArticlesList(newsModel);
 renderChannelsList.showChannels();
-articlesList.showNews();
+articlesList.showNews() */
