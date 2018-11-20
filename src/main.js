@@ -83,13 +83,11 @@ class ChannelsList {
             })
     }
 
-    updateNews () {
-        this.newsModel.getNews().then((news) => {
-            const articlesList = new ArticlesList(newsModel);
-            articlesList.showNews();
-        });
+    async updateNews () {
+        await this.newsModel.getNews();
+        const articlesList = new ArticlesList(newsModel);
+        articlesList.showNews();
       }
-  
 }
 
 
