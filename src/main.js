@@ -1,4 +1,3 @@
-
 class NewsModel {
     constructor(apiKey) {
         this.url = 'https://newsapi.org/v2/';
@@ -9,17 +8,19 @@ class NewsModel {
             apiKey: this.apiKey
         };
     }
-    getNews() {
+    async getNews() {
         const params = Object.keys(this.requestParams).map((key) => `${key}=${this.requestParams[key]}`).join('&');
-        return fetch(`${this.url}everything?${params}`)
-        .then((res)=>res.json())
-        .then((res)=>res.articles)
+        const response = await fetch(`${this.url}everything?${params}`);
+        const responseJson = await response.json();
+        return responseJson.articles;
     }
-    getSources() {
-        return fetch(`${this.url}sources?apiKey=${this.apiKey}`)
-        .then((res)=>res.json())
-        .then((res)=>res.sources)
-    }
+
+    async getSources () {
+        const response = await fetch(`${this.url}sources?apiKey=${this.apiKey}`);
+        const responseJson = await response.json();
+        return responseJson.sources;
+      }
+
     updateRequestParams(key, value) {
         this.requestParams[key] = value;
     }
@@ -29,11 +30,12 @@ class ArticlesList {
     constructor(newsModel) {
         this.newsModel = newsModel
     }
-    showNews () {
-        this.newsModel.getNews().then((articles) => {
-            this.displayArticles(articles);
-          });
-      }
+
+      async showNews () {
+        const news = await this.newsModel.getNews();
+        this.displayArticles(news);
+    }
+
       displayArticles (articles) {
         const newsContainer = document.querySelector('.news-grid');
         const tpl = articles
@@ -57,15 +59,20 @@ class ChannelsList {
     constructor(newsModel) {
         this.newsModel = newsModel
     }
-    showChannels() {
-        this.newsModel.getSources().then((sources) => {
-            this.renderSourceControl();
-            this.addSourceHandler();
-          });
+
+    async showChannels () {
+        const sources  = await this.newsModel.getSources();
+        this.renderSourceControl('source-selector', sources);
+        this.addSourceHandler();
     }
 
-    renderSourceControl() {
-        alert(123);
+    renderSourceControl(container, options) {
+        let dropdown = document.getElementById(container);
+        let optionsSet = '';
+        for (let value of options) {
+            optionsSet += `<option value="${value.id}">${value.name}</option>`
+          }
+          dropdown.innerHTML = optionsSet;
       }
 
     addSourceHandler() {

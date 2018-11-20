@@ -1,0 +1,35 @@
+{
+  "name": "froncampes6",
+  "version": "1.0.0",
+  "description": "frotcamp task #1",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-file compiled.js",
+    "watch": "babel src --watch --out-file compiled.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhurovi4/froncampes6.git"
+  },
+  "keywords": [
+    "babel"
+  ],
+  "author": "Valery Zhurovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhurovi4/froncampes6/issues"
+  },
+  "homepage": "https://github.com/zhurovi4/froncampes6#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0",
+    "@babel/runtime": "^7.1.5",
+    "promise-polyfill": "^8.1.0",
+    "whatwg-fetch": "^3.0.0"
+  }
+}
