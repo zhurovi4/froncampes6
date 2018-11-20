@@ -6,9 +6,20 @@ body {
 }
 
 header {
+    position: relative;
+    overflow: hidden;
+    height: 100px;
     background: #62DBEE;
-    padding: 20px;
+}
+
+header h1 {
+    font-size: 145px;
+    position: absolute;
+    top: -31px;
+    margin: 0;
     color: #fff;
+    opacity: 0.4;
+    text-transform: uppercase;
 }
 
 .controls {
@@ -17,23 +28,16 @@ header {
     color: #fff;
 }
 
-
 .news-grid {
     padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    
-    /* Supports Grid */
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-auto-rows: minmax(200px, auto);
-    grid-gap: 1em;
 }
 
 .article {
+    display: inline-block;
     background: #F9F8FF;
     border-radius: 3px;
     height: 340px;
+    width: 200px;
     overflow: hidden;
     color: #5a5a5a;
 }
@@ -41,6 +45,7 @@ header {
 .article-image {
     height: 168px;
     background-size: cover;
+    background-position: center;
 }
 
 .article-heading {
@@ -59,3 +64,27 @@ header {
     text-decoration: underline;
     color: #1380A1;
 }
+
+.article {
+    width: calc(100% / 4 - 20px);
+    margin: 10px;
+}
+
+.news-grid {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  
+  
+  @media screen and (max-width: 992px) {
+    .article {
+        width: calc(50% - 20px);
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .article {
+      width: calc(100% - 20px);
+    }
+  }
