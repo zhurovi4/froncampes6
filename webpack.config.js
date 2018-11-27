@@ -9,7 +9,7 @@ const config = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-          filename: "[name].css",
+          filename: "app.css",
           chunkFilename: "[id].css"
         })
       ],
@@ -27,7 +27,15 @@ const config = {
                     "css-loader"
                   ],
                 test: /\.css$/
-            }
+            },
+            {
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    { loader: 'css-loader', options: { url: false, sourceMap: true } },
+                    { loader: 'sass-loader', options: { sourceMap: true } }
+                ],
+                test: /\.scss$/,
+              }
         ]
     }
 
