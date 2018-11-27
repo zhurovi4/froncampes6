@@ -4,8 +4,10 @@
   "description": "frotcamp task #1",
   "main": "main.js",
   "scripts": {
+    "serve": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src --out-file compiled.js",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
     "watch": "babel src --watch --out-file compiled.js"
   },
   "repository": {
@@ -24,7 +26,17 @@
   "devDependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
-    "@babel/preset-env": "^7.1.6"
+    "@babel/preset-env": "^7.1.6",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.4",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^1.0.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "mini-css-extract-plugin": "^0.4.5",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
