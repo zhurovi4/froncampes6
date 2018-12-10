@@ -92,6 +92,125 @@ $large: 992px;
   }
 
 
+  .hidden {
+    display: none !important;
+}
+
+.error-handler-popup-wrraper {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(117, 111, 111, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.error-handler-popup {
+    position: relative;
+    max-width: 400px;
+    width: 90%;
+    min-height: 100px;
+    background-color: white;
+    border-radius: 5px;
+}
+.close-popup-btn {
+    background-color: rgb(240, 40, 26);
+    color: white;
+    position: absolute;
+    border-radius: 20px;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-family: Geneva, Arial, Helvetica, sans-serif;
+    cursor: pointer;
+    padding: 0 7px;
+}
+
+.close-popup-btn:hover {
+    background-color: rgb(199, 34, 34);
+}
+
+.popup-title {
+    font-weight: bold;
+    background-color: #e96363;
+    color: white;
+    font-size: 20px;
+    padding: 10px 20px 10px 10px;
+    border-radius: 5px 5px 0 0;
+}
+
+.popup-msg {
+    padding: 10px;
+    font-size: 17px;
+}
+
+.overlay {
+    position: fixed;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.70);
+    cursor: pointer;
+    z-index: 1;
+}
+
+.popup {
+    position: absolute;
+    display: none;
+    padding: 30px 20px;
+    text-align: center;
+    background-color: #fff;
+    width: 320px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+ }
+
+.close-popup-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 40px;
+    width: 40px;
+    font-size: 40px;
+    background: transparent;
+    padding: 0;
+    line-height: 1;
+    border: 0;
+    outline: 0;
+    color: red;
+    cursor: pointer;
+    transition: color 0.3s;
+    &:hover {
+        color: #fff;
+        background: red;
+    }
+}
+
+.showPopup {
+    margin-bottom: 30px;
+    font-size: 18px;
+    padding: 10px 30px;
+    margin: 10px;
+}
+
+.btnBottomText {
+    line-height: 1.7;
+    font-size: 20px;
+    margin: 10px;
+}
+
+
+
+
+
+
+
 
 
 

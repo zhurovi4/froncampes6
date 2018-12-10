@@ -12,9 +12,18 @@ export default class Articles {
     }
     async fetchNews() {
         const params = `sources=${this.sources}&pageSize=${this.requestParams.pageSize}&apiKey=${this.apiKey}`;
-        const response = await fetch(`${this.url}everything?${params}`);
-        const responseJson = await response.json();
-        this.getMarkup(responseJson.articles);
+        try {
+            const response = await fetch(`${this.url}everything?${params}`);
+            const responseJson = await response.json();
+            this.getMarkup(responseJson.articles);
+          } catch(err) {
+             // Lazy Initialization
+                import('../errorPopup')
+                .then(errorPopupModule => {
+                    const errorPopup = new errorPopupModule.ErrorPopup();
+                    errorPopup.showErrorPopup('Something went wrong...');
+                });
+          }
     }
 
     getMarkup(news) {

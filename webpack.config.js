@@ -5,7 +5,8 @@ const config = {
     entry: ['@babel/polyfill', './src/app.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'app.bundle.js'
+        filename: '[name].bundle.js',
+        chunkFilename: '[name].bundle.js',
     },
     plugins: [
         new MiniCssExtractPlugin({
