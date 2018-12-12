@@ -1,0 +1,67 @@
+db.restaurants.find({borough: "Queens", cuisine: "Chinese"}).count()
+728
+
+db.restaurants.find().sort( {"grades.score": -1 } ).limit(1).pretty()
+
+{
+        "_id" : ObjectId("5c1031b48bbbb672907eb647"),
+        "address" : {
+                "building" : "65",
+                "coord" : [
+                        -73.9782725,
+                        40.7624022
+                ],
+                "street" : "West   54 Street",
+                "zipcode" : "10019"
+        },
+        "borough" : "Manhattan",
+        "cuisine" : "American",
+        "grades" : [
+                {
+                        "date" : ISODate("2014-08-22T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2014-03-28T00:00:00Z"),
+                        "grade" : "C",
+                        "score" : 131
+                },
+                {
+                        "date" : ISODate("2013-09-25T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2013-04-08T00:00:00Z"),
+                        "grade" : "B",
+                        "score" : 25
+                },
+                {
+                        "date" : ISODate("2012-10-15T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 11
+                },
+                {
+                        "date" : ISODate("2011-10-19T00:00:00Z"),
+                        "grade" : "A",
+                        "score" : 13
+                }
+        ],
+        "name" : "Murals On 54/Randolphs'S",
+        "restaurant_id" : "40372466"
+}
+
+db.restaurants.updateMany({borough: "Manhattan" }, {$push: {grades: { grade: "A", score: 7, date: ISODate()}}})
+
+{ "acknowledged" : true, "matchedCount" : 10259, "modifiedCount" : 10259 }
+
+db.restaurants.find({"grades.8.score": {$lt: 7}}, {"name": 1, "_id": 0})
+
+{ "name" : "Silver Krust West Indian Restaurant" }
+{ "name" : "Pure Food" }
+
+db.restaurants.find({'cuisine': 'Seafood', 'grades': {$elemMatch: {'grade': 'B', $and: [{'date': {$gt: ISODate('2014-02-01')}}, {'date': {$lt: ISODate('2014-03-01')}}]}}}, {'borough': 1})
+{ "_id" : ObjectId("5c1031b58bbbb672907eea55"), "borough" : "Bronx" }
+{ "_id" : ObjectId("5c1031b58bbbb672907eeccd"), "borough" : "Manhattan" }
+
